@@ -16,6 +16,7 @@ tfplan
 build/
 target/
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 
 # IDEs
