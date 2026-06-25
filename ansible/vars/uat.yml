@@ -1,0 +1,13 @@
+# Environment Configuration
+env_name: uat
+app_root: /var/www/aarivox/uat
+
+# Database Settings
+db_name: aarivox
+db_user: postgres
+# db_password (passed via command-line / secret: root)
+
+# Secrets & AWS Settings
+# aws_access_key (passed via command-line / secret)
+# aws_secret_key (passed via command-line / secret)
+jwt_secret: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"

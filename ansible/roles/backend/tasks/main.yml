@@ -1,0 +1,83 @@
+# ==============================================================================
+# ROLE: BACKEND (Java Spring Boot API with Zero-Downtime Port Swap)
+# ==============================================================================
+- name: Create Backend version directories
+  file:
+    path: "{{ app_root }}/backend/versions"
+    state: directory
+    owner: ubuntu
+
+- name: Copy Java JAR with timestamp
+  copy:
+    src: "{{ playbook_dir }}/../aarivox-smartplanner-backend/build/libs/api.jar"
+    dest: "{{ app_root }}/backend/versions/api-{{ deploy_dt }}.jar"
+    owner: ubuntu
+
+- name: Check if port 8080 is listening
+  wait_for:
+    port: 8080
+    timeout: 3
+    state: started
+  register: port_8080_check
+  ignore_errors: yes
+
+- name: Determine dynamic port assignment (Blue-Green Swap)
+  set_fact:
+    new_port: "{{ '8081' if port_8080_check is succeeded else '8080' }}"
+    old_port: "{{ '8080' if port_8080_check is succeeded else '8081' }}"
+
+- name: Update Backend Symlink to new release
+  file:
+    src: "{{ app_root }}/backend/versions/api-{{ deploy_dt }}.jar"
+    dest: "{{ app_root }}/backend/api.jar"
+    state: link
+    force: yes
+
+- name: Generate Backend .env for the new port
+  template:
+    src: backend_env.j2
+    dest: "{{ app_root }}/backend/.env.{{ new_port }}"
+    owner: ubuntu
+  vars:
+    server_port: "{{ new_port }}"
+
+- name: Start new version on port {{ new_port }} via PM2
+  shell: |
+    cd {{ app_root }}/backend
+    echo '#!/bin/bash' > start_{{ new_port }}.sh
+    echo 'set -a; [ -f .env.{{ new_port }} ] && source .env.{{ new_port }}; set +a; exec java -jar api.jar' >> start_{{ new_port }}.sh
+    chmod +x start_{{ new_port }}.sh
+    
+    pm2 delete aarivox-api-{{ new_port }} || true
+    pm2 start ./start_{{ new_port }}.sh \
+      --name aarivox-api-{{ new_port }} \
+      --interpreter bash \
+      --output "{{ app_root }}/backend/out_{{ new_port }}.log" \
+      --error "{{ app_root }}/backend/err_{{ new_port }}.log" \
+      --time
+    pm2 save
+  become_user: ubuntu
+
+- name: Wait for new version on port {{ new_port }} to start listening
+  wait_for:
+    port: "{{ new_port }}"
+    host: 127.0.0.1
+    delay: 5
+    timeout: 60
+
+- name: Set active port fact for Nginx configuration
+  set_fact:
+    active_port: "{{ new_port }}"
+
+- name: Stop and clean up old backend version on port {{ old_port }}
+  shell: |
+    pm2 delete aarivox-api-{{ old_port }} || true
+    pm2 save
+  become_user: ubuntu
+  when: port_8080_check is succeeded
+  ignore_errors: yes
+
+- name: Prune old jar versions (Keep only latest)
+  shell: |
+    ls -dt {{ app_root }}/backend/versions/api-*.jar | tail -n +2 | xargs rm -f
+  ignore_errors: yes

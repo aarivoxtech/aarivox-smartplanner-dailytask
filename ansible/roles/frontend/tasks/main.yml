@@ -1,0 +1,48 @@
+# ==============================================================================
+# ROLE: FRONTEND (Angular UI)
+# ==============================================================================
+- name: Create Frontend Base Folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+  loop:
+    - "{{ app_root }}/frontend"
+    - "{{ app_root }}/frontend/versions"
+
+- name: Create Frontend Version Folder
+  file:
+    path: "{{ app_root }}/frontend/versions/v-{{ deploy_dt }}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+
+- name: Copy Angular Build Assets
+  ansible.posix.synchronize:
+    src: "{{ playbook_dir }}/../aarivox-smartplanner-admin-application/dist/aarivox-smartplanner-admin-application/browser/"
+    dest: "{{ app_root }}/frontend/versions/v-{{ deploy_dt }}/"
+    delete: no
+  become: no
+
+- name: Fix Frontend Permissions
+  file:
+    path: "{{ app_root }}/frontend/versions/v-{{ deploy_dt }}"
+    state: directory
+    owner: ubuntu
+    group: www-data
+    mode: '0755'
+    recurse: yes
+
+- name: Update Frontend Symlink
+  file:
+    src: "{{ app_root }}/frontend/versions/v-{{ deploy_dt }}"
+    dest: "{{ app_root }}/frontend/current"
+    state: link
+    force: yes
+
+- name: Prune old UI versions (Keep 2)
+  shell: "ls -dt {{ app_root }}/frontend/versions/v-* | tail -n +3 | xargs rm -rf"
+  ignore_errors: yes

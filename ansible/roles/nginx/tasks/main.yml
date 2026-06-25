@@ -1,0 +1,23 @@
+# ==============================================================================
+# ROLE: NGINX (Web Routing)
+# ==============================================================================
+- name: Deploy Nginx Configuration from Template
+  template:
+    src: ../../../nginx.conf.j2
+    dest: "/etc/nginx/sites-available/aarivox-{{ env_name }}"
+  notify: Reload Nginx
+
+- name: Enable the Site in Nginx
+  file:
+    src: "/etc/nginx/sites-available/aarivox-{{ env_name }}"
+    dest: "/etc/nginx/sites-enabled/aarivox-{{ env_name }}"
+    state: link
+
+- name: Remove Default Nginx Config
+  file: { path: /etc/nginx/sites-enabled/default, state: absent }
+  notify: Reload Nginx
+
+- name: Validate Nginx Configuration
+  command: nginx -t
+  register: nginx_test
+  changed_when: false

@@ -1,0 +1,19 @@
+# ==============================================================================
+# MASTER ANSIBLE PLAYBOOK: ROLE ORCHESTRATION FOR AARIVOX SMART PLANNER
+# ==============================================================================
+- name: Master Deployment for Aarivox Smart Planner
+  hosts: all
+  become: yes
+
+  vars_files:
+    - "vars/uat.yml"
+
+  vars:
+    deploy_dt: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}"
+
+  roles:
+    - common    # 1. Install system requirements (Java 17, Node, Nginx, PostgreSQL, etc.)
+    - database  # 2. Setup Postgres & database/user
+    - backend   # 3. Deploy Java Spring Boot Backend (Zero Downtime Port Swap)
+    - nginx     # 4. Setup Web Server pointing to the active backend port
+    - frontend  # 5. Deploy Angular UI

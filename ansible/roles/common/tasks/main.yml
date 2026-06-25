@@ -1,0 +1,26 @@
+# ==============================================================================
+# ROLE: COMMON (System Setup)
+# ==============================================================================
+- name: Get deployment timestamp
+  set_fact:
+    deploy_dt: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}"
+
+- name: Wait for unattended upgrades to complete and apt locks to release
+  shell: while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 5; done;
+
+- name: Update and Install System Dependencies
+  apt:
+    name: [rsync, acl, openjdk-17-jdk, redis-server, nodejs, npm, nginx, postgresql, postgresql-contrib, awscli, python3-psycopg2]
+    state: present
+    update_cache: yes
+
+- name: Install PM2 (Process Manager)
+  npm: { name: pm2, global: yes }
+
+- name: Create global app root directory
+  file:
+    path: "{{ app_root }}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'

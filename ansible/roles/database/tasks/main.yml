@@ -1,0 +1,21 @@
+# ==============================================================================
+# ROLE: DATABASE (Postgres Setup)
+# ==============================================================================
+- name: Ensure PostgreSQL is running
+  service: { name: postgresql, state: started, enabled: yes }
+
+- name: Create PostgreSQL DB User
+  become_user: postgres
+  postgresql_user: { name: "{{ db_user }}", password: "{{ db_password }}", role_attr_flags: SUPERUSER }
+  vars:
+    ansible_async_dir: '/tmp/.ansible_async'
+  environment:
+    ANSIBLE_ALLOW_WORLD_READABLE_TMPFILES: "1"
+
+- name: Create Application Database
+  become_user: postgres
+  postgresql_db: { name: "{{ db_name }}", owner: "{{ db_user }}" }
+  vars:
+    ansible_async_dir: '/tmp/.ansible_async'
+  environment:
+    ANSIBLE_ALLOW_WORLD_READABLE_TMPFILES: "1"
