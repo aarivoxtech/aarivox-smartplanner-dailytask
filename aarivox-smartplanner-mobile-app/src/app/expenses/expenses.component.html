@@ -1,0 +1,270 @@
+<ion-content [forceOverscroll]="false" class="expenses-content">
+  <div class="expenses-container">
+    <!-- Screen Header -->
+    <div class="expenses-header-row">
+      <div>
+        <h2>Expenses</h2>
+        <p>Monitor your financial flow and budget</p>
+      </div>
+      <button class="add-expense-btn bg-gradient-primary" (click)="openAddModal()">
+        <ion-icon name="add-outline"></ion-icon>
+        Add Expense
+      </button>
+    </div>
+
+    <!-- Toggle View Segments -->
+    <ion-segment 
+      [value]="activeTab()" 
+      (ionChange)="onTabChange($event)" 
+      class="custom-segment">
+      <ion-segment-button value="transactions">
+        <ion-icon name="list-outline"></ion-icon>
+        Transactions
+      </ion-segment-button>
+      <ion-segment-button value="analytics">
+        <ion-icon name="analytics-outline"></ion-icon>
+        Analytics
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- TRANSACTIONS VIEW -->
+    @if (activeTab() === 'transactions') {
+      <div class="tab-view-box animate-fade-in">
+        <!-- Search bar -->
+        <div class="search-bar-box">
+          <ion-icon name="search-outline" class="search-icon"></ion-icon>
+          <input 
+            type="text" 
+            placeholder="Search expenses..." 
+            [value]="searchQuery()" 
+            (input)="onSearch($event)" />
+        </div>
+
+        <!-- Date Filters -->
+        <div class="date-filters-bar">
+          <button type="button" [class.active]="activeDateFilter() === 'all'" (click)="activeDateFilter.set('all')">All</button>
+          <button type="button" [class.active]="activeDateFilter() === 'today'" (click)="activeDateFilter.set('today')">Today</button>
+          <button type="button" [class.active]="activeDateFilter() === 'yesterday'" (click)="activeDateFilter.set('yesterday')">Yesterday</button>
+          <button type="button" [class.active]="activeDateFilter() === 'month'" (click)="activeDateFilter.set('month')">Month</button>
+        </div>
+
+        <!-- Layout Mode Toggle Row -->
+        <div class="layout-toggle-row">
+          <span class="results-count">{{ filteredExpenses().length }} transactions</span>
+          <div class="toggle-buttons">
+            <button type="button" [class.active]="viewMode() === 'table'" (click)="viewMode.set('table')" title="Table View">
+              <ion-icon name="list-outline"></ion-icon>
+            </button>
+            <button type="button" [class.active]="viewMode() === 'cards'" (click)="viewMode.set('cards')" title="Card View">
+              <ion-icon name="grid-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Mini Summary -->
+        <div class="mini-summary-cards">
+          <div class="mini-card bg-light-blue">
+            <span class="lbl">Total Expenses</span>
+            <span class="val">${{ totalExpenses() | number:'1.2-2' }}</span>
+          </div>
+          <div class="mini-card bg-light-green">
+            <span class="lbl">Spent Today</span>
+            <span class="val">${{ todayExpenses() | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <!-- Transaction List -->
+        <div class="transaction-list">
+          @if (filteredExpenses().length === 0) {
+            <app-empty-state 
+              message="No transactions found" 
+              subMessage="Try adjusting filters or tap 'Add Expense' to log a new spending."
+              iconName="cash-outline">
+            </app-empty-state>
+          } @else {
+            @if (viewMode() === 'table') {
+              <!-- Premium Table View -->
+              <div class="table-responsive premium-table-container">
+                <table class="premium-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Category</th>
+                      <th>Notes</th>
+                      <th>Amount</th>
+                      <th class="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (item of filteredExpenses(); track item.id) {
+                      <tr class="animate-fade-in">
+                        <td class="td-date">{{ item.date | date:'shortDate' }}</td>
+                        <td>
+                          <span class="table-cat-badge" [class]="item.category">{{ item.category }}</span>
+                        </td>
+                        <td class="td-notes" (click)="openEditModal(item)">{{ item.notes || '-' }}</td>
+                        <td class="td-amount">${{ item.amount | number:'1.2-2' }}</td>
+                        <td class="td-actions">
+                          <div class="action-buttons-wrap">
+                            <button type="button" class="edit-icon-btn" (click)="openEditModal(item)" title="Edit">
+                              <ion-icon name="create-outline"></ion-icon>
+                            </button>
+                            <button type="button" class="delete-icon-btn" (click)="deleteExpense(item.id)" title="Delete">
+                              <ion-icon name="trash-outline"></ion-icon>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            } @else {
+              <!-- Card View -->
+              @for (item of filteredExpenses(); track item.id) {
+                <div class="expense-row-card premium-card animate-slide-up">
+                  <!-- Category Icon -->
+                  <div class="category-icon-box" [class]="item.category">
+                    <ion-icon name="wallet-outline"></ion-icon>
+                  </div>
+
+                  <!-- Transaction Details -->
+                  <div class="expense-details-box" (click)="openEditModal(item)">
+                    <div class="details-top">
+                      <h4>{{ item.category }}</h4>
+                      <span class="expense-price">${{ item.amount | number:'1.2-2' }}</span>
+                    </div>
+                    <p class="expense-notes">{{ item.notes || 'No description' }}</p>
+                    <span class="expense-date">
+                      <ion-icon name="calendar-outline"></ion-icon>
+                      {{ item.date | date:'mediumDate' }}
+                    </span>
+                  </div>
+
+                  <!-- Delete Action -->
+                  <button type="button" class="delete-btn" (click)="deleteExpense(item.id)">
+                    <ion-icon name="trash-outline"></ion-icon>
+                  </button>
+                </div>
+              }
+            }
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ANALYTICS VIEW -->
+    @if (activeTab() === 'analytics') {
+      <div class="tab-view-box animate-fade-in">
+        <!-- Main Budget Progress Card -->
+        <div class="premium-card budget-status-card">
+          <h4>Budget Analytics</h4>
+          <p>Visual overview of financial categories and shares.</p>
+
+          <!-- Vertical category percentages list -->
+          <div class="analytics-bars-container">
+            @for (cat of categorySummaries(); track cat.name) {
+              <div class="analytics-bar-row">
+                <div class="bar-info-row">
+                  <div class="bar-legend-col">
+                    <span class="legend-color-dot" [class]="cat.name"></span>
+                    <span class="bar-name">{{ cat.name }}</span>
+                  </div>
+                  <span class="bar-value-pct">${{ cat.value | number:'1.2-2' }} ({{ cat.percentage }}%)</span>
+                </div>
+                <div class="analytics-track">
+                  <div class="analytics-fill" [class]="cat.name" [style.width.%]="cat.percentage"></div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Expense Category Summary Listing -->
+        <div class="category-breakdown-section">
+          <h3>Category Summary</h3>
+          <div class="category-list">
+            @for (cat of categorySummaries(); track cat.name) {
+              <div class="premium-card cat-summary-card">
+                <div class="cat-left">
+                  <div class="category-icon-box" [class]="cat.name">
+                    <ion-icon name="wallet-outline"></ion-icon>
+                  </div>
+                  <div>
+                    <h5>{{ cat.name }}</h5>
+                    <p>{{ cat.percentage }}% of total spent</p>
+                  </div>
+                </div>
+                <span class="cat-price">${{ cat.value | number:'1.2-2' }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Form Modal (Add / Edit Expense) -->
+  <ion-modal [isOpen]="isModalOpen()" (didDismiss)="closeModal()" class="custom-form-modal">
+    <ng-template>
+      <div class="modal-header-bar">
+        <h3>{{ isEditing() ? 'Edit Expense' : 'New Expense' }}</h3>
+        <button class="modal-close-btn" (click)="closeModal()">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+
+      <div class="modal-form-content">
+        <form [formGroup]="expenseForm" (ngSubmit)="saveExpense()">
+          <div class="form-field">
+            <label for="exp-amount">Amount ($)</label>
+            <input 
+              id="exp-amount"
+              type="number" 
+              step="0.01" 
+              placeholder="0.00" 
+              formControlName="amount" 
+              required />
+            @if (expenseForm.get('amount')?.touched && expenseForm.get('amount')?.invalid) {
+              <span class="error-msg">Valid amount is required</span>
+            }
+          </div>
+
+          <div class="form-field">
+            <label for="exp-category">Category</label>
+            <select id="exp-category" formControlName="category" required>
+              <option value="Food">Food</option>
+              <option value="Travel">Travel</option>
+              <option value="Bills">Bills</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="exp-date">Date</label>
+            <input 
+              id="exp-date"
+              type="date" 
+              formControlName="date" 
+              required />
+          </div>
+
+          <div class="form-field">
+            <label for="exp-notes">Notes</label>
+            <textarea 
+              id="exp-notes"
+              placeholder="Describe this spending..." 
+              formControlName="notes" 
+              rows="3"></textarea>
+          </div>
+
+          <div class="modal-action-row">
+            <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
+            <button type="submit" class="btn-save bg-gradient-primary">Save Expense</button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

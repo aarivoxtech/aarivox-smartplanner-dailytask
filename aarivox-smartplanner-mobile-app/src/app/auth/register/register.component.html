@@ -1,0 +1,125 @@
+<ion-content [forceOverscroll]="false" class="register-content">
+  <div class="register-container animate-slide-up">
+    <!-- Header Branding -->
+    <div class="auth-header">
+      <div class="logo-box" style="width: 80px; height: 80px;">
+        <img src="assets/aarivox_logo.png" class="auth-logo" alt="Aarivox Logo" style="object-fit: contain; border-radius: 50%; width: 100%; height: 100%;" />
+      </div>
+      <h2>Create Account</h2>
+      <p class="brand-sub">Start planning with Aarivox today</p>
+    </div>
+
+    <!-- Error Banner -->
+    @if (errorMessage()) {
+      <div class="error-banner animate-fade-in">
+        <p>{{ errorMessage() }}</p>
+      </div>
+    }
+
+    <!-- Register Form -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <ion-item class="custom-input-item" lines="none">
+          <ion-icon name="person-outline" slot="start"></ion-icon>
+          <ion-input 
+            id="fullName"
+            type="text" 
+            placeholder="John Doe" 
+            formControlName="fullName"
+            required>
+          </ion-input>
+        </ion-item>
+        @if (registerForm.get('fullName')?.touched && registerForm.get('fullName')?.invalid) {
+          <span class="field-error">Full name is required (min 2 chars)</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <ion-item class="custom-input-item" lines="none">
+          <ion-icon name="mail-outline" slot="start"></ion-icon>
+          <ion-input 
+            id="email"
+            type="email" 
+            placeholder="john@example.com" 
+            formControlName="email"
+            required>
+          </ion-input>
+        </ion-item>
+        @if (registerForm.get('email')?.touched && registerForm.get('email')?.hasError('email')) {
+          <span class="field-error">Enter a valid email address</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="mobileNumber">Mobile Number</label>
+        <ion-item class="custom-input-item" lines="none">
+          <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
+          <ion-input 
+            id="mobileNumber"
+            type="tel" 
+            placeholder="+1 234 567 890" 
+            formControlName="mobileNumber"
+            required>
+          </ion-input>
+        </ion-item>
+        @if (registerForm.get('mobileNumber')?.touched && registerForm.get('mobileNumber')?.invalid) {
+          <span class="field-error">Enter a valid phone number (7-15 digits)</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <ion-item class="custom-input-item" lines="none">
+          <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+          <ion-input 
+            id="password"
+            type="password" 
+            placeholder="••••••••" 
+            formControlName="password"
+            required>
+          </ion-input>
+        </ion-item>
+        @if (registerForm.get('password')?.touched && registerForm.get('password')?.hasError('minlength')) {
+          <span class="field-error">Password must be at least 6 characters</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <ion-item class="custom-input-item" lines="none">
+          <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+          <ion-input 
+            id="confirmPassword"
+            type="password" 
+            placeholder="••••••••" 
+            formControlName="confirmPassword"
+            required>
+          </ion-input>
+        </ion-item>
+        @if (registerForm.touched && registerForm.hasError('passwordMismatch')) {
+          <span class="field-error">Passwords do not match</span>
+        }
+      </div>
+
+      <!-- Action Button -->
+      <ion-button 
+        type="submit" 
+        expand="block" 
+        class="action-btn-main" 
+        [disabled]="isLoading() || registerForm.invalid">
+        @if (isLoading()) {
+          <ion-spinner name="crescent"></ion-spinner>
+        } @else {
+          Create Account
+        }
+      </ion-button>
+    </form>
+
+    <!-- Login Redirect -->
+    <div class="auth-footer">
+      <p>Already have an account? <a routerLink="/login">Sign In</a></p>
+    </div>
+  </div>
+</ion-content>

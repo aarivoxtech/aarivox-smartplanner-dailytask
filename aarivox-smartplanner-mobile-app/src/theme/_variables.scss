@@ -1,0 +1,72 @@
+// Aarivox Enterprise Theme Variables
+
+// Colors
+$primary-color: #2563eb;
+$primary-rgb: 37, 99, 235;
+$primary-shade: #1d4ed8;
+$primary-tint: #3b82f6;
+
+$secondary-color: #4f46e5;
+$secondary-rgb: 79, 70, 229;
+$secondary-shade: #4338ca;
+$secondary-tint: #6366f1;
+
+$tertiary-color: #0f172a;
+$tertiary-rgb: 15, 23, 42;
+$tertiary-shade: #020617;
+$tertiary-tint: #1e293b;
+
+$success-color: #10b981;
+$success-rgb: 16, 185, 129;
+$success-shade: #059669;
+$success-tint: #34d399;
+
+$warning-color: #f59e0b;
+$warning-rgb: 245, 158, 11;
+$warning-shade: #d97706;
+$warning-tint: #fbbf24;
+
+$danger-color: #ef4444;
+$danger-rgb: 239, 68, 68;
+$danger-shade: #dc2626;
+$danger-tint: #f87171;
+
+$dark-color: #1e293b;
+$dark-rgb: 30, 41, 59;
+$dark-contrast: #ffffff;
+$dark-shade: #0f172a;
+$dark-tint: #334155;
+
+$medium-color: #64748b;
+$medium-rgb: 100, 116, 139;
+$medium-shade: #475569;
+$medium-tint: #94a3b8;
+
+$light-color: #f8fafc;
+$light-rgb: 248, 250, 252;
+$light-contrast: #0f172a;
+$light-shade: #e2e8f0;
+$light-tint: #ffffff;
+
+// Spacing & Border Radius
+$border-radius-lg: 20px;
+$border-radius-md: 14px;
+$border-radius-sm: 8px;
+
+// Shadows
+$soft-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+$card-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+$hover-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.12), 0 8px 16px -4px rgba(37, 99, 235, 0.04);
+$btn-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+
+// Gradients
+$gradient-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+$gradient-accent: linear-gradient(135deg, #6366f1 0%, #4945e5 100%);
+$gradient-success: linear-gradient(135deg, #34d399 0%, #059669 100%);
+$gradient-warning: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+$gradient-danger: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+$gradient-neutral: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+$gradient-dark: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+
+// Typography
+$font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Roboto", sans-serif;

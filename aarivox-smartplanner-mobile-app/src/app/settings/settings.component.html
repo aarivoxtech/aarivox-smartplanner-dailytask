@@ -1,0 +1,85 @@
+<ion-content [forceOverscroll]="false" class="settings-content">
+  <div class="settings-container">
+    <!-- Screen Header -->
+    <div class="settings-header-row">
+      <div>
+        <h2>Settings</h2>
+        <p>Customize your application environment and preferences</p>
+      </div>
+    </div>
+
+    <!-- Theme Preferences -->
+    <div class="settings-card premium-card">
+      <div class="card-header">
+        <ion-icon [name]="darkMode() ? 'moon-outline' : 'sunny-outline'" class="card-icon blue"></ion-icon>
+        <div class="header-details">
+          <h4>Theme Customization</h4>
+          <p>Toggle between system-wide light and dark styling</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="setting-row">
+          <span>Dark Mode Theme</span>
+          <button class="toggle-btn" [class.active]="darkMode()" (click)="toggleTheme()">
+            <div class="toggle-slider"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sound / Alarm Preferences -->
+    <div class="settings-card premium-card">
+      <div class="card-header">
+        <ion-icon [name]="soundEnabled() ? 'volume-high-outline' : 'volume-mute-outline'" class="card-icon green"></ion-icon>
+        <div class="header-details">
+          <h4>Alarm & Sounds</h4>
+          <p>Configure chime alarms for due tasks and alerts</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="setting-row">
+          <span>Synthesized Audio Reminders</span>
+          <button class="toggle-btn" [class.active]="soundEnabled()" (click)="toggleSound()">
+            <div class="toggle-slider"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Preferences -->
+    <div class="settings-card premium-card">
+      <div class="card-header">
+        <ion-icon name="notifications-outline" class="card-icon purple"></ion-icon>
+        <div class="header-details">
+          <h4>Push Notifications</h4>
+          <p>Toggle cloud push alerts and scheduling</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="setting-row">
+          <span>Firebase Cloud Messaging (FCM)</span>
+          <button class="toggle-btn" [class.active]="pushEnabled()" (click)="togglePush()">
+            <div class="toggle-slider"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security Information -->
+    <div class="settings-card premium-card">
+      <div class="card-header">
+        <ion-icon name="lock-closed-outline" class="card-icon gray"></ion-icon>
+        <div class="header-details">
+          <h4>Security Center</h4>
+          <p>Check security preferences and credentials configuration</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="security-info-box">
+          <p>Your session is securely authenticated via **Firebase Auth** using advanced OAuth 2.0 flows.</p>
+          <span class="auth-method-badge">OAuth / Federated Session</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

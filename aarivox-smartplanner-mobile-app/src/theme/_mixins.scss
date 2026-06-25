@@ -1,0 +1,48 @@
+// Aarivox SCSS Reusable Mixins
+
+// Flexbox Center
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Custom Scrollbar styling
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 10px;
+    &:hover {
+      background: rgba(148, 163, 184, 0.5);
+    }
+  }
+}
+
+// Media query for tablets/desktops
+@mixin tablet-up {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+
+// Premium Card layout
+@mixin premium-card-layout {
+  background: var(--ion-background-color);
+  border-radius: var(--border-radius-lg);
+  padding: 20px;
+  box-shadow: var(--soft-shadow);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  &:active, &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+  }
+}

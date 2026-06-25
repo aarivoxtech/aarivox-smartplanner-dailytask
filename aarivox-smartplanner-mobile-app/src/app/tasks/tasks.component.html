@@ -1,0 +1,199 @@
+<ion-content [forceOverscroll]="false" class="tasks-content">
+  <div class="tasks-container">
+    <!-- Screen Header -->
+    <div class="tasks-header-row">
+      <div>
+        <h2>Tasks</h2>
+        <p>Manage your daily agenda and objectives</p>
+      </div>
+      <button class="add-task-btn bg-gradient-primary" (click)="openAddModal()">
+        <ion-icon name="add-outline"></ion-icon>
+        Add Task
+      </button>
+    </div>
+
+    <!-- Search and Filters Section -->
+    <div class="search-filter-section">
+      <div class="search-bar-box">
+        <ion-icon name="search-outline" class="search-icon"></ion-icon>
+        <input 
+          type="text" 
+          placeholder="Search tasks..." 
+          [value]="searchQuery()" 
+          (input)="onSearch($event)" />
+      </div>
+
+      <!-- Segment status filter -->
+      <ion-segment 
+        [value]="activeStatusFilter()" 
+        (ionChange)="onStatusFilterChange($event)" 
+        class="custom-segment">
+        <ion-segment-button value="all">All</ion-segment-button>
+        <ion-segment-button value="pending">Pending</ion-segment-button>
+        <ion-segment-button value="in-progress">Active</ion-segment-button>
+        <ion-segment-button value="completed">Done</ion-segment-button>
+      </ion-segment>
+
+      <!-- Priority Filter Select -->
+      <div class="priority-filter-box">
+        <ion-icon name="filter-outline" class="filter-icon"></ion-icon>
+        <select [value]="activePriorityFilter()" (change)="onPriorityFilterChange($event)">
+          <option value="all">All Priorities</option>
+          <option value="high">High Priority</option>
+          <option value="medium">Medium Priority</option>
+          <option value="low">Low Priority</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tasks List -->
+    <div class="tasks-list-box">
+      @if (filteredTasks().length === 0) {
+        <app-empty-state 
+          message="No tasks found" 
+          subMessage="Try adjusting filters or tap 'Add Task' to create a new one."
+          iconName="checkbox-outline">
+        </app-empty-state>
+      } @else {
+        @for (item of filteredTasks(); track item.id) {
+          <div class="task-row-card premium-card animate-slide-up" [class.completed-opacity]="item.status === 'completed'">
+            <!-- Left Check Toggle Circle -->
+            <button class="check-toggle-circle" (click)="toggleTaskStatus(item)">
+              <div class="circle-inner" [class]="item.status">
+                @if (item.status === 'completed') {
+                  <ion-icon name="checkmark-circle-outline" class="check-svg"></ion-icon>
+                }
+              </div>
+            </button>
+
+            <!-- Middle Task Details -->
+            <div class="task-main-details" (click)="openEditModal(item)">
+              <div class="task-title-line">
+                <span class="status-badge" [class]="item.priority">{{ item.priority }}</span>
+                <span class="status-badge" [class]="item.status">{{ item.status }}</span>
+              </div>
+              <h4>{{ item.title }}</h4>
+              @if (item.description) {
+                <p>{{ item.description }}</p>
+              }
+              
+              <!-- Reminder / Date Info -->
+              <div class="task-dates-row">
+                <span class="due-tag">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  Due: {{ item.dueDate | date:'mediumDate' }}
+                </span>
+                @if (item.reminderDate) {
+                  <span class="reminder-tag">
+                    <ion-icon name="alarm-outline"></ion-icon>
+                    Remind: {{ item.reminderDate | date:'shortDate' }} &#64; {{ item.reminderTime || '09:00' }}
+                  </span>
+                }
+              </div>
+            </div>
+
+            <!-- Right Actions (Edit & Delete) -->
+            <div class="action-buttons-wrap">
+              <button type="button" class="edit-icon-btn" (click)="openEditModal(item)" title="Edit">
+                <ion-icon name="create-outline"></ion-icon>
+              </button>
+              <button type="button" class="delete-icon-btn" (click)="deleteTask(item.id)" title="Delete">
+                <ion-icon name="trash-outline"></ion-icon>
+              </button>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Form Modal (Add / Edit Task) -->
+  <ion-modal [isOpen]="isModalOpen()" (didDismiss)="closeModal()" class="custom-form-modal">
+    <ng-template>
+      <div class="modal-header-bar">
+        <h3>{{ isEditing() ? 'Edit Task' : 'New Task' }}</h3>
+        <button class="modal-close-btn" (click)="closeModal()">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+
+      <div class="modal-form-content">
+        <form [formGroup]="taskForm" (ngSubmit)="saveTask()">
+          <div class="form-field">
+            <label for="task-title">Title</label>
+            <input 
+              id="task-title"
+              type="text" 
+              placeholder="Task summary" 
+              formControlName="title" 
+              required />
+            @if (taskForm.get('title')?.touched && taskForm.get('title')?.invalid) {
+              <span class="error-msg">Title is required (min 3 characters)</span>
+            }
+          </div>
+
+          <div class="form-field">
+            <label for="task-desc">Description</label>
+            <textarea 
+              id="task-desc"
+              placeholder="Add more details..." 
+              formControlName="description" 
+              rows="3"></textarea>
+          </div>
+
+          <div class="form-row-cols">
+            <div class="form-field">
+              <label for="task-priority">Priority</label>
+              <select id="task-priority" formControlName="priority" required>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="task-status">Status</label>
+              <select id="task-status" formControlName="status" required>
+                <option value="pending">Pending</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="task-dueDate">Due Date</label>
+            <input 
+              id="task-dueDate"
+              type="date" 
+              formControlName="dueDate" 
+              required />
+          </div>
+
+          <div class="form-row-cols">
+            <div class="form-field">
+              <label for="task-remindDate">Reminder Date</label>
+              <input 
+                id="task-remindDate"
+                type="date" 
+                formControlName="reminderDate" />
+            </div>
+
+            <div class="form-field">
+              <label for="task-remindTime">Reminder Time</label>
+              <input 
+                id="task-remindTime"
+                type="time" 
+                formControlName="reminderTime" />
+            </div>
+          </div>
+
+          <div class="modal-action-row">
+            <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
+            <button type="submit" class="btn-save bg-gradient-primary">Save Task</button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

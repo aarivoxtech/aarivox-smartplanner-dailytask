@@ -1,0 +1,248 @@
+.reports-content {
+  --background: #f8fafc;
+}
+
+.reports-container {
+  padding: 20px 16px 80px 16px;
+  box-sizing: border-box;
+}
+
+/* Header Row */
+.reports-header-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0 0 4px 0;
+    color: var(--ion-color-tertiary);
+  }
+
+  p {
+    font-size: 0.82rem;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+
+  .export-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .export-btn {
+    flex: 1;
+    border: none;
+    border-radius: var(--border-radius-md);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow: var(--btn-shadow);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    &:active {
+      transform: scale(0.97);
+    }
+
+    &.pdf {
+      background: var(--ion-color-primary);
+    }
+
+    &.excel {
+      background: #10b981;
+    }
+  }
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--soft-shadow);
+
+  .icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+
+  .bg-blue-light { background: rgba(0, 82, 204, 0.08); }
+  .bg-green-light { background: rgba(16, 185, 129, 0.08); }
+  .bg-purple-light { background: rgba(139, 92, 246, 0.08); }
+
+  .icon-blue { color: var(--ion-color-primary); }
+  .icon-green { color: #10b981; }
+  .icon-purple { color: #8b5cf6; }
+
+  .metric-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    span {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ion-color-medium);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin: 0;
+      color: var(--ion-color-tertiary);
+    }
+  }
+}
+
+/* Analytics Detail Box */
+.analytics-detail-box {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: var(--border-radius-md);
+  padding: 20px;
+  box-shadow: var(--soft-shadow);
+
+  &.spacer-top {
+    margin-top: 20px;
+  }
+
+  .box-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+
+    .box-header-icon {
+      font-size: 20px;
+      color: var(--ion-color-primary);
+    }
+
+    h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--ion-color-tertiary);
+    }
+  }
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.category-progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .cat-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.88rem;
+    font-weight: 600;
+
+    .cat-name {
+      color: var(--ion-color-tertiary);
+    }
+
+    .cat-value {
+      color: var(--ion-color-medium);
+    }
+  }
+
+  .premium-progress-bar {
+    height: 8px;
+    border-radius: 4px;
+    --progress-background: var(--ion-color-primary);
+    --buffer-background: #f1f5f9;
+  }
+}
+
+.productivity-metric-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 0;
+
+  .numerical-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h2 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      margin: 0;
+      color: var(--ion-color-primary);
+    }
+
+    span {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ion-color-medium);
+    }
+  }
+
+  .insight-text {
+    font-size: 0.82rem;
+    color: var(--ion-color-medium);
+    line-height: 1.5;
+    margin: 0;
+    max-width: 400px;
+  }
+}
+
+/* Media Queries for Desktop layout compatibility */
+@media (min-width: 768px) {
+  .reports-header-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .export-actions {
+      width: auto;
+    }
+
+    .export-btn {
+      padding: 10px 20px;
+      font-size: 0.88rem;
+    }
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,84 @@
+<ion-content [forceOverscroll]="false" class="reports-content">
+  <div class="reports-container">
+    <!-- Screen Header -->
+    <div class="reports-header-row">
+      <div>
+        <h2>Reports & Analytics</h2>
+        <p>Analyze productivity trends and download document logs</p>
+      </div>
+      <div class="export-actions">
+        <button class="export-btn pdf" (click)="exportReport('pdf')">
+          <ion-icon name="document-text-outline"></ion-icon>
+          PDF Report
+        </button>
+        <button class="export-btn excel" (click)="exportReport('excel')">
+          <ion-icon name="download-outline"></ion-icon>
+          Excel Sheet
+        </button>
+      </div>
+    </div>
+
+    <!-- Analytics Dashboard Cards -->
+    <div class="metrics-grid">
+      <div class="metric-card premium-card">
+        <div class="icon-wrap bg-blue-light">
+          <ion-icon name="checkbox-outline" class="icon-blue"></ion-icon>
+        </div>
+        <div class="metric-info">
+          <span>Completed Tasks</span>
+          <h3>{{ backendStats() ? backendStats().completedTasks : completedTasks() }} / {{ backendStats() ? backendStats().totalTasks : totalTasks() }}</h3>
+        </div>
+      </div>
+
+      <div class="metric-card premium-card">
+        <div class="icon-wrap bg-green-light">
+          <ion-icon name="cash-outline" class="icon-green"></ion-icon>
+        </div>
+        <div class="metric-info">
+          <span>Total Expenses</span>
+          <h3>${{ (backendStats() ? backendStats().totalExpenses : totalExpenses()) | number:'1.2-2' }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Summaries -->
+    <div class="analytics-detail-box premium-card">
+      <div class="box-header">
+        <ion-icon name="analytics-outline" class="box-header-icon"></ion-icon>
+        <h4>Spending by Category</h4>
+      </div>
+      <div class="categories-list">
+        @for (cat of expensesByCategory(); track cat.name) {
+          <div class="category-progress-item">
+            <div class="cat-info-row">
+              <span class="cat-name">{{ cat.name }}</span>
+              <span class="cat-value">${{ cat.value | number:'1.2-2' }} ({{ cat.percentage }}%)</span>
+            </div>
+            <ion-progress-bar [value]="cat.percentage / 100" class="premium-progress-bar"></ion-progress-bar>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Productivity Insights Card -->
+    <div class="analytics-detail-box premium-card spacer-top">
+      <div class="box-header">
+        <ion-icon name="pie-chart-outline" class="box-header-icon"></ion-icon>
+        <h4>Productivity Metrics</h4>
+      </div>
+      <div class="productivity-metric-body">
+        <div class="metric-wheel-row">
+          <div class="numerical-display">
+            <h2>
+              {{ totalTasks() > 0 ? (completedTasks() / totalTasks() * 100 | number:'1.0-0') : 100 }}%
+            </h2>
+            <span>Task Completion Rate</span>
+          </div>
+        </div>
+        <p class="insight-text">
+          Keep logging and completing tasks to increase your overall rating. Set standalone reminders to keep notifications active on your mobile devices and desktop.
+        </p>
+      </div>
+    </div>
+  </div>
+</ion-content>

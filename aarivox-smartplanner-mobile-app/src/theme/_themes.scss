@@ -1,0 +1,137 @@
+// Aarivox Theme configurations (Light & Dark theme CSS property mappings)
+
+@import 'variables';
+
+:root {
+  --ion-font-family: #{$font-family};
+
+  // Primary
+  --ion-color-primary: #{$primary-color};
+  --ion-color-primary-rgb: #{$primary-rgb};
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #{$primary-shade};
+  --ion-color-primary-tint: #{$primary-tint};
+
+  // Secondary
+  --ion-color-secondary: #{$secondary-color};
+  --ion-color-secondary-rgb: #{$secondary-rgb};
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #{$secondary-shade};
+  --ion-color-secondary-tint: #{$secondary-tint};
+
+  // Tertiary
+  --ion-color-tertiary: #{$tertiary-color};
+  --ion-color-tertiary-rgb: #{$tertiary-rgb};
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #{$tertiary-shade};
+  --ion-color-tertiary-tint: #{$tertiary-tint};
+
+  // Success
+  --ion-color-success: #{$success-color};
+  --ion-color-success-rgb: #{$success-rgb};
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #{$success-shade};
+  --ion-color-success-tint: #{$success-tint};
+
+  // Warning
+  --ion-color-warning: #{$warning-color};
+  --ion-color-warning-rgb: #{$warning-rgb};
+  --ion-color-warning-contrast: #ffffff;
+  --ion-color-warning-contrast-rgb: 255, 255, 255;
+  --ion-color-warning-shade: #{$warning-shade};
+  --ion-color-warning-tint: #{$warning-tint};
+
+  // Danger
+  --ion-color-danger: #{$danger-color};
+  --ion-color-danger-rgb: #{$danger-rgb};
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #{$danger-shade};
+  --ion-color-danger-tint: #{$danger-tint};
+
+  // Dark
+  --ion-color-dark: #{$dark-color};
+  --ion-color-dark-rgb: #{$dark-rgb};
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #{$dark-shade};
+  --ion-color-dark-tint: #{$dark-tint};
+
+  // Medium
+  --ion-color-medium: #{$medium-color};
+  --ion-color-medium-rgb: #{$medium-rgb};
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #{$medium-shade};
+  --ion-color-medium-tint: #{$medium-tint};
+
+  // Light
+  --ion-color-light: #{$light-color};
+  --ion-color-light-rgb: #{$light-rgb};
+  --ion-color-light-contrast: #{$light-contrast};
+  --ion-color-light-contrast-rgb: 15, 23, 42;
+  --ion-color-light-shade: #{$light-shade};
+  --ion-color-light-tint: #{$light-tint};
+
+  // Base background and text properties
+  --ion-background-color: #ffffff;
+  --ion-background-color-rgb: 255, 255, 255;
+  --ion-text-color: #0f172a;
+  --ion-text-color-rgb: 15, 23, 42;
+  --ion-border-color: #e2e8f0;
+
+  // Custom radii & shadows
+  --border-radius-lg: #{$border-radius-lg};
+  --border-radius-md: #{$border-radius-md};
+  --border-radius-sm: #{$border-radius-sm};
+  --soft-shadow: #{$soft-shadow};
+  --card-shadow: #{$card-shadow};
+  --hover-shadow: #{$hover-shadow};
+  --btn-shadow: #{$btn-shadow};
+
+  // Custom gradients
+  --gradient-primary: #{$gradient-primary};
+  --gradient-accent: #{$gradient-accent};
+  --gradient-success: #{$gradient-success};
+  --gradient-warning: #{$gradient-warning};
+  --gradient-danger: #{$gradient-danger};
+  --gradient-neutral: #{$gradient-neutral};
+  --gradient-dark: #{$gradient-dark};
+}
+
+// Global Dark Mode Theme Overrides
+body.dark-theme {
+  --ion-background-color: #0f172a;
+  --ion-background-color-rgb: 15, 23, 42;
+  
+  --ion-text-color: #f8fafc;
+  --ion-text-color-rgb: 248, 250, 252;
+  
+  --ion-border-color: #1e293b;
+  
+  // Override light elements in dark mode
+  --ion-color-light: #1e293b;
+  --ion-color-light-rgb: 30, 41, 59;
+  --ion-color-light-contrast: #f8fafc;
+  --ion-color-light-contrast-rgb: 248, 250, 252;
+  --ion-color-light-shade: #0f172a;
+  --ion-color-light-tint: #334155;
+
+  // Soft Slate backgrounds for items/cards
+  --ion-color-step-50: #131c31;
+  --ion-color-step-100: #17223b;
+  --ion-color-step-150: #1b2845;
+  --ion-color-step-200: #1e2e4e;
+
+  // Dark mode shadows
+  --soft-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3), 0 4px 12px -2px rgba(0, 0, 0, 0.2);
+  --hover-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.25), 0 8px 16px -4px rgba(37, 99, 235, 0.1);
+
+  // Gradient neutrals in dark mode
+  --gradient-neutral: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}

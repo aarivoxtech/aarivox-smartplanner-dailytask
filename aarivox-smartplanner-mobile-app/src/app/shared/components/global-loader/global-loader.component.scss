@@ -1,0 +1,42 @@
+.loader-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto; /* Trap all clicks so user cannot click while loading */
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--ion-background-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--ion-border-color);
+}
+
+.loader-text {
+  margin-top: 12px;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ion-text-color);
+}
+
+// Dark Mode glass overlay
+body.dark-theme {
+  .loader-overlay {
+    background: rgba(15, 23, 42, 0.7);
+  }
+}

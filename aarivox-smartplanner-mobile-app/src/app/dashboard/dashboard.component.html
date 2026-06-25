@@ -1,0 +1,245 @@
+<ion-content [forceOverscroll]="false" class="dashboard-content">
+  <div class="dashboard-container animate-fade-in">
+    <!-- User Greeting -->
+    <div class="user-greeting-row">
+      <div>
+        <p class="greeting-subtitle">Welcome Back,</p>
+        <h2 class="greeting-title">{{ currentUser()?.fullName || 'Aarivox User' }} 👋</h2>
+      </div>
+      <div class="profile-avatar-thumb-initials bg-gradient-primary">
+        {{ currentUser()?.fullName ? currentUser()?.fullName?.charAt(0)?.toUpperCase() : 'U' }}
+      </div>
+    </div>
+
+    <!-- Summary Metrics Carousel Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card bg-gradient-primary">
+        <div class="metric-icon-box">
+          <ion-icon name="wallet-outline"></ion-icon>
+        </div>
+        <div class="metric-info">
+          <span>Total Expenses</span>
+          <h3>${{ totalExpenses() | number:'1.2-2' }}</h3>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box text-blue">
+          <ion-icon name="analytics-outline"></ion-icon>
+        </div>
+        <div class="metric-info">
+          <span>Today's Expenses</span>
+          <h3>${{ todayExpenses() | number:'1.2-2' }}</h3>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box text-orange">
+          <ion-icon name="time-outline"></ion-icon>
+        </div>
+        <div class="metric-info">
+          <span>Pending Tasks</span>
+          <h3>{{ pendingTasks() }}</h3>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box text-green">
+          <ion-icon name="checkbox-outline"></ion-icon>
+        </div>
+        <div class="metric-info">
+          <span>Completed Tasks</span>
+          <h3>{{ completedTasks() }}</h3>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box text-red">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+        </div>
+        <div class="metric-info">
+          <span>Task Reminders</span>
+          <h3>{{ upcomingReminders() }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Productivity & Weekly Analytics -->
+    <div class="dashboard-section">
+      <div class="premium-card productivity-card">
+        <div class="card-title-row">
+          <h4>Weekly Productivity</h4>
+          <span class="pct-badge bg-gradient-primary">{{ productivityPercentage() }}%</span>
+        </div>
+        <p>Goal completion rate for this week</p>
+        <ion-progress-bar [value]="productivityPercentage() / 100" class="custom-progress"></ion-progress-bar>
+        <div class="progress-details">
+          <span>{{ completedTasks() }} of {{ totalTasks() }} tasks finished</span>
+          <span>{{ pendingTasks() }} remaining</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly Expense Summary Chart Widget -->
+    <div class="dashboard-section">
+      <div class="premium-card chart-card">
+        <h4>Monthly Expense Summary</h4>
+        <p class="section-desc">Monthly spending overview for the current half-year</p>
+        
+        <!-- Premium SVG bar chart -->
+        <div class="chart-container">
+          <svg viewBox="0 0 400 200" class="svg-chart">
+            <!-- Grid Lines -->
+            <line x1="40" y1="30" x2="380" y2="30" stroke="#f1f5f9" stroke-width="1" />
+            <line x1="40" y1="70" x2="380" y2="70" stroke="#f1f5f9" stroke-width="1" />
+            <line x1="40" y1="110" x2="380" y2="110" stroke="#f1f5f9" stroke-width="1" />
+            <line x1="40" y1="150" x2="380" y2="150" stroke="#cbd5e1" stroke-dasharray="4 4" stroke-width="1.5" />
+            <line x1="40" y1="160" x2="380" y2="160" stroke="#94a3b8" stroke-width="1.5" />
+
+            <!-- Y Axis Label -->
+            <text x="10" y="34" fill="#94a3b8" font-size="9" font-weight="600">$500</text>
+            <text x="10" y="74" fill="#94a3b8" font-size="9" font-weight="600">$300</text>
+            <text x="10" y="114" fill="#94a3b8" font-size="9" font-weight="600">$100</text>
+            <text x="20" y="164" fill="#94a3b8" font-size="9" font-weight="600">$0</text>
+
+            <!-- Bar Chart Blocks (Jan - Jun) -->
+            <!-- Jan ($180) -->
+            <rect x="65" y="100" width="22" height="60" rx="4" fill="rgba(148, 163, 184, 0.2)" />
+            <!-- Feb ($240) -->
+            <rect x="115" y="85" width="22" height="75" rx="4" fill="rgba(148, 163, 184, 0.2)" />
+            <!-- Mar ($450) -->
+            <rect x="165" y="45" width="22" height="115" rx="4" fill="rgba(148, 163, 184, 0.2)" />
+            <!-- Apr ($310) -->
+            <rect x="215" y="70" width="22" height="90" rx="4" fill="rgba(148, 163, 184, 0.2)" />
+            <!-- May ($290) -->
+            <rect x="265" y="75" width="22" height="85" rx="4" fill="rgba(148, 163, 184, 0.2)" />
+            <!-- Jun (Current Month - Highlighted Blue Bar showing totalExpenses) -->
+            <rect class="current-month-bar animate-chart-bar" x="315" y="42" width="22" height="118" rx="4" fill="url(#chart-blue-grad)" />
+
+            <!-- Labels for X Axis -->
+            <text x="76" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">Jan</text>
+            <text x="126" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">Feb</text>
+            <text x="176" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">Mar</text>
+            <text x="226" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">Apr</text>
+            <text x="276" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">May</text>
+            <text x="326" y="180" text-anchor="middle" fill="#2563eb" font-size="10" font-weight="700">Jun</text>
+
+            <!-- Gradients Definition -->
+            <defs>
+              <linearGradient id="chart-blue-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#3b82f6" />
+                <stop offset="100%" stop-color="#1d4ed8" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        
+        <div class="chart-summary-row">
+          <span class="bullet-dot primary-dot"></span>
+          <span class="lbl-info">June Expenses: <strong>${{ totalExpenses() | number:'1.2-2' }}</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expense Category Summary & SVG Chart -->
+    <div class="dashboard-section">
+      <div class="premium-card analytics-card">
+        <h4>Expense Summary by Category</h4>
+        <p class="section-desc">Distribution of spending across categories</p>
+        
+        <!-- Custom visual category bar chart -->
+        <div class="category-bars-list">
+          @for (cat of categorySummaries(); track cat.name) {
+            @if (cat.value > 0) {
+              <div class="category-bar-item">
+                <div class="cat-label-row">
+                  <span class="cat-name">{{ cat.name }}</span>
+                  <span class="cat-val">${{ cat.value | number:'1.2-2' }} ({{ cat.percentage }}%)</span>
+                </div>
+                <div class="bar-bg">
+                  <div class="bar-fill" [class]="cat.name" [style.width.%]="cat.percentage"></div>
+                </div>
+              </div>
+            }
+          } @empty {
+            <div class="empty-analytics">
+              <p>No expense data recorded. Add an expense to see analytics!</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions Panel -->
+    <div class="dashboard-section">
+      <h3 class="section-title">Quick Actions</h3>
+      <div class="quick-actions-row">
+        <button class="action-btn-item" (click)="quickAdd('task')">
+          <div class="action-icon-circle bg-blue">
+            <ion-icon name="create-outline"></ion-icon>
+          </div>
+          <span>New Task</span>
+        </button>
+
+        <button class="action-btn-item" (click)="quickAdd('expense')">
+          <div class="action-icon-circle bg-green">
+            <ion-icon name="wallet-outline"></ion-icon>
+          </div>
+          <span>New Expense</span>
+        </button>
+
+        <button class="action-btn-item" routerLink="/app/profile">
+          <div class="action-icon-circle bg-dark">
+            <ion-icon name="calendar-outline"></ion-icon>
+          </div>
+          <span>Settings</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Recent Activities Timeline -->
+    <div class="dashboard-section final-section">
+      <h3 class="section-title">Recent Activities</h3>
+      <div class="timeline-card premium-card">
+        @if (recentExpenses().length === 0) {
+          <div class="empty-timeline">
+            <p>No recent transactions or updates</p>
+          </div>
+        } @else {
+          <div class="timeline-list">
+            @for (exp of recentExpenses(); track exp.id) {
+              <div class="timeline-item">
+                <div class="timeline-icon" [class]="exp.category">
+                  <ion-icon name="wallet-outline"></ion-icon>
+                </div>
+                <div class="timeline-info">
+                  <div class="timeline-title-row">
+                    <h5>Spent on {{ exp.category }}</h5>
+                    <span class="timeline-price">${{ exp.amount | number:'1.2-2' }}</span>
+                  </div>
+                  <p class="timeline-desc">{{ exp.notes || 'No description provided' }}</p>
+                  <span class="timeline-time">{{ exp.date | date:'mediumDate' }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Action Button -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="custom-fab">
+    <ion-fab-button class="fab-trigger-btn">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="quickAdd('task')" class="fab-sub-btn bg-blue" title="Add Task">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="quickAdd('expense')" class="fab-sub-btn bg-green" title="Add Expense">
+        <ion-icon name="wallet-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

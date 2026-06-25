@@ -1,0 +1,42 @@
+{
+  "name": "aarivox-smart-planner",
+  "version": "0.0.1",
+  "author": "Aarivox Team",
+  "homepage": "https://aarivox.com",
+  "scripts": {
+    "ng": "ng",
+    "start": "node C:\\Users\\sandu\\.gemini\\antigravity\\brain\\761aa075-c0f3-4757-8cd0-93ab8bf5194a\\scratch\\copy_logo.js && ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "lint": "ng lint",
+    "copy-logo": "node C:\\Users\\sandu\\.gemini\\antigravity\\brain\\761aa075-c0f3-4757-8cd0-93ab8bf5194a\\scratch\\copy_logo.js"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^17.3.0",
+    "@angular/common": "^17.3.0",
+    "@angular/compiler": "^17.3.0",
+    "@angular/core": "^17.3.0",
+    "@angular/forms": "^17.3.0",
+    "@angular/platform-browser": "^17.3.0",
+    "@angular/platform-browser-dynamic": "^17.3.0",
+    "@angular/router": "^17.3.0",
+    "@ionic/angular": "^8.0.0",
+    "ionicons": "^7.2.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.3",
+    "firebase": "^10.8.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/haptics": "^6.0.0",
+    "@capacitor/push-notifications": "^6.0.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^17.3.0",
+    "@angular/cli": "^17.3.0",
+    "@angular/compiler-cli": "^17.3.0",
+    "@types/node": "^18.15.11",
+    "typescript": "~5.4.2"
+  }
+}

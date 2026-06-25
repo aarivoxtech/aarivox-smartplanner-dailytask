@@ -1,0 +1,158 @@
+<ion-content [forceOverscroll]="false" class="profile-content">
+  <div class="profile-container">
+    <!-- Screen Header -->
+    <div class="profile-header-row">
+      <div>
+        <h2>Profile</h2>
+        <p>Manage your account settings and preferences</p>
+      </div>
+    </div>
+
+    <!-- Profile Header Info Card -->
+    <div class="premium-card user-info-card animate-slide-up">
+      <div class="avatar-col">
+        <div class="user-avatar-initials bg-gradient-primary">
+          {{ currentUser()?.fullName ? currentUser()?.fullName?.charAt(0)?.toUpperCase() : 'U' }}
+        </div>
+      </div>
+      <div class="details-col">
+        <h3>{{ currentUser()?.fullName }}</h3>
+        <p>{{ currentUser()?.email }}</p>
+        <button class="edit-profile-btn" (click)="toggleEdit()">
+          <ion-icon [name]="isEditing() ? 'close-outline' : 'create-outline'"></ion-icon>
+          {{ isEditing() ? 'Cancel' : 'Edit Profile' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Dynamic Edit vs View Form Block -->
+    <div class="profile-form-section animate-slide-up">
+      @if (isEditing()) {
+        <!-- Edit Mode Form -->
+        <div class="premium-card edit-card">
+          <h4>Account Details</h4>
+          <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+            <div class="field-item">
+              <label for="prof-fullName">Full Name</label>
+              <input id="prof-fullName" type="text" formControlName="fullName" required />
+            </div>
+
+            <div class="field-item">
+              <label for="prof-email">Email Address</label>
+              <input id="prof-email" type="email" formControlName="email" required />
+            </div>
+
+            <div class="field-item">
+              <label for="prof-mobileNumber">Mobile Number</label>
+              <input id="prof-mobileNumber" type="tel" formControlName="mobileNumber" required />
+            </div>
+
+            <button type="submit" class="save-details-btn bg-gradient-primary">
+              <ion-icon name="save-outline"></ion-icon>
+              Save Changes
+            </button>
+          </form>
+        </div>
+      } @else {
+        <!-- View Mode Info List -->
+        <div class="premium-card view-details-card">
+          <h4>Account Details</h4>
+          <div class="details-list">
+            <div class="info-row">
+              <div class="icon-label">
+                <ion-icon name="person-outline"></ion-icon>
+                <span>Full Name</span>
+              </div>
+              <span class="value">{{ currentUser()?.fullName }}</span>
+            </div>
+
+            <div class="info-row">
+              <div class="icon-label">
+                <ion-icon name="mail-outline"></ion-icon>
+                <span>Email Address</span>
+              </div>
+              <span class="value">{{ currentUser()?.email }}</span>
+            </div>
+
+            <div class="info-row">
+              <div class="icon-label">
+                <ion-icon name="phone-portrait-outline"></ion-icon>
+                <span>Mobile Number</span>
+              </div>
+              <span class="value">{{ currentUser()?.mobileNumber || 'Not set' }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Reports & Analytics Navigation -->
+    <div class="settings-section animate-slide-up">
+      <div class="premium-card settings-card" style="padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;" [routerLink]="['/app/reports']">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <ion-icon name="analytics-outline" style="font-size: 24px; color: var(--ion-color-primary);"></ion-icon>
+          <div>
+            <h5 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--ion-color-tertiary);">Reports & Analytics</h5>
+            <p style="margin: 0; font-size: 0.75rem; color: var(--ion-color-medium);">View weekly productivity & export documents</p>
+          </div>
+        </div>
+        <ion-icon name="chevron-forward-outline" style="font-size: 20px; color: var(--ion-color-medium);"></ion-icon>
+      </div>
+    </div>
+
+    <!-- Application Settings Block -->
+    <div class="settings-section animate-slide-up">
+      <div class="premium-card settings-card">
+        <h4>System Preferences</h4>
+        <form [formGroup]="settingsForm">
+          <div class="toggle-row">
+            <div class="toggle-label-box">
+              <ion-icon name="notifications-outline" class="sett-icon text-blue"></ion-icon>
+              <div>
+                <h5>Push Notifications</h5>
+                <p>Enable task and expense alerts</p>
+              </div>
+            </div>
+            <ion-toggle formControlName="notificationsEnabled" (ionChange)="onSettingChange()"></ion-toggle>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-label-box">
+              <ion-icon name="volume-high-outline" class="sett-icon text-green"></ion-icon>
+              <div>
+                <h5>Alarm Reminders</h5>
+                <p>Play audio alerts for upcoming tasks</p>
+              </div>
+            </div>
+            <ion-toggle formControlName="alarmEnabled" (ionChange)="onSettingChange()"></ion-toggle>
+          </div>
+
+          @if (settingsForm.get('alarmEnabled')?.value) {
+            <div class="select-row">
+              <div class="select-label-box">
+                <ion-icon name="settings-outline" class="sett-icon text-orange"></ion-icon>
+                <div>
+                  <h5>Alarm Sound</h5>
+                  <p>Choose sound for local alarms</p>
+                </div>
+              </div>
+              <select formControlName="alarmSound" (change)="onSettingChange()" class="sound-select">
+                <option value="Chime">Chime</option>
+                <option value="Digital">Digital Alert</option>
+                <option value="Classic">Classic Bell</option>
+              </select>
+            </div>
+          }
+        </form>
+      </div>
+    </div>
+
+    <!-- Logout Action Row -->
+    <div class="logout-row-action animate-slide-up">
+      <button class="logout-btn" (click)="onLogout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        Log Out Session
+      </button>
+    </div>
+  </div>
+</ion-content>
