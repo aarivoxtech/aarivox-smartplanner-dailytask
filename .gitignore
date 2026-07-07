@@ -35,3 +35,6 @@ target/
 secret_info
 out.log
 err.log
+LOCAL_SETUP_AND_SECRETS.md
+*.exe
+scratch/
