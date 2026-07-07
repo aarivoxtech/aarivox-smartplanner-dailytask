@@ -5,7 +5,7 @@ This guide details the infrastructure, configurations, and pipeline setup for bu
 ---
 
 ## 🛠️ Technology Stack
-1. **Frontend**: Angular UI served by Nginx.
+1. **Frontend**: Angular UI served by Nginx.    
 2. **Backend**: Java 17 Spring Boot API managed by PM2.
 3. **Database**: PostgreSQL (automatically configured via Spring Boot JPA).
 4. **Infrastructure**: AWS EC2 (`t3.micro`) and Elastic IP provisioned via Terraform.
