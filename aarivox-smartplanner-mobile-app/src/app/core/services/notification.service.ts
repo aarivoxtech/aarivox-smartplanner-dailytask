@@ -78,6 +78,12 @@ export class NotificationService {
    * Initializes Capacitor Push Notifications
    */
   async initPushNotifications() {
+    // Prevent app crash on Android when google-services.json is missing or Firebase is not configured
+    if (!environment.firebase.apiKey || environment.firebase.apiKey === 'YOUR_API_KEY') {
+      console.warn('Firebase credentials are placeholders. Skipping native push notifications registration.');
+      return;
+    }
+
     try {
       const { PushNotifications } = await import('@capacitor/push-notifications');
       

@@ -15,7 +15,8 @@
     update_cache: yes
 
 - name: Install PM2 (Process Manager)
-  npm: { name: pm2, global: yes }
+  command: npm install -g pm2
+  changed_when: false
 
 - name: Create global app root directory
   file:

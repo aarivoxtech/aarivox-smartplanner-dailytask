@@ -75,10 +75,10 @@ resource "aws_security_group" "web_sg" {
   tags = { Name = "Aarivox-${var.env}-SG", Env = var.env }
 }
 
-# EC2 Instance (t3.micro)
+# EC2 Instance (m7i-flex.large)
 resource "aws_instance" "app_server" {
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.small"
+  instance_type = "m7i-flex.large"
   key_name      = var.key_name
 
   vpc_security_group_ids = [aws_security_group.web_sg.id]
@@ -89,6 +89,11 @@ resource "aws_instance" "app_server" {
   }
 
   tags = { Name = "Aarivox-${var.env}-Server", Env = var.env }
+}
+
+import {
+  to = aws_eip.app_eip
+  id = "eipalloc-0a0865bf299519774"
 }
 
 # Elastic IP
