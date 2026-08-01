@@ -38,6 +38,31 @@ export class AuthService {
       } catch (e) {
         this.logout();
       }
+    } else {
+      // Check if we have an active token (e.g. rememberMe was false, but session is active)
+      const token = sessionStorage.getItem('aarivox_auth_token') || localStorage.getItem('aarivox_auth_token');
+      if (token) {
+        this.apiService.get<any>('auth/profile').subscribe({
+          next: (user) => {
+            const profile: UserProfile = {
+              id: user.id,
+              fullName: user.fullName,
+              email: user.email,
+              mobileNumber: user.mobileNumber || '',
+              settings: {
+                notificationsEnabled: true,
+                alarmEnabled: true,
+                alarmSound: 'Chime'
+              }
+            };
+            this.currentUserSignal.set(profile);
+            this.notificationService.initPushNotifications();
+          },
+          error: () => {
+            this.logout();
+          }
+        });
+      }
     }
   }
 
